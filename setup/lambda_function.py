@@ -6,8 +6,8 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-region = "us-east-1"
-static_instance_id = "i-0e31fd71e53236b01"
+region = ""
+static_instance_id = ""
 
 ec2 = boto3.client('ec2', region_name=region)
 ssm = boto3.client('ssm', region_name=region)
