@@ -61,13 +61,15 @@ jobs:
 
       - name: Check and create ECR repository if not exists
         run: |
-          if ! aws ecr describe-repositories --region ${{ secrets.AWS_REGION }} --repository-names ${{ env.REPOSITORY }} > /dev/null 2>&1; then
-            echo "Repository ${{ env.REPOSITORY }} does not exist. Creating it..."
-            aws ecr create-repository --repository-name ${{ env.REPOSITORY }} --region ${{ secrets.AWS_REGION }}
-          else
-            echo "Repository ${{ env.REPOSITORY }} already exists."
-          fi
-
+           ssh -i $SSH_PRIVATE_KEY_PATH $VM_NAME "
+             if ! aws ecr describe-repositories --region ${{ secrets.AWS_REGION }} --repository-names ${{ env.REPOSITORY }} > /dev/null 2>&1; then
+               echo 'Repository ${{ env.REPOSITORY }} does not exist. Creating it...'
+               aws ecr create-repository --repository-name ${{ env.REPOSITORY }} --region ${{ secrets.AWS_REGION }}
+             else
+               echo 'Repository ${{ env.REPOSITORY }} already exists.'
+             fi
+           "
+           
       - name: Tag Docker Image
         run: |
           DOCKER_IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${REPOSITORY}:${TAG}"
