@@ -1,4 +1,4 @@
-name: 'Local Action'
+name: 'Create EC2 Action'
 description: 'Runs a composite step action to manage EC2 and Terraform'
 
 inputs:
